@@ -1,37 +1,55 @@
 package br.com.projetoweb.projetoweb.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.persistence.*;
 import javax.persistence.Id;
 
 @Entity
-public class Pessoa
-{
+@Table(name = "tbl_Pessoas")
+public class Pessoa {
     @Id
+    @Column(name = "idPessoa")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long idPessoa;
 
+    @JsonProperty("nome")
     @Column(nullable = false)
     private String nome;
+
+    @JsonProperty("sobrenome")
+    @Column(nullable = false)
+    private String sobrenome;
+
+    @JsonProperty("cpf")
+    @Column(nullable = false)
+    private String cpf;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "idUsuario")
+    private Usuario usuario;
 
 
 
     // Getters e Setters
-    public long getId() {
-        return id;
+    public long getIdPessoa() { return idPessoa; }
+
+    public void setIdPessoa(long idPessoa) { this.idPessoa = idPessoa; }
+
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public String getSobrenome() { return sobrenome; }
+    public void setSobrenome(String sobrenome) { this.sobrenome = sobrenome; }
+
+    public String getCpf() { return cpf; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
+
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
