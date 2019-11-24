@@ -20,6 +20,11 @@ public class Venda {
     private Usuario usuario;
 
     @ManyToMany
+    @JoinTable(
+            name = "venda_produto",
+            joinColumns = {@JoinColumn(name = "idVenda")},
+            inverseJoinColumns = {@JoinColumn(name = "idProduto")}
+    )
     private Set<Produto> produtos = new HashSet<Produto>();
 
 

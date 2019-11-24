@@ -57,7 +57,8 @@ public class UsuarioController {
     public void newVenda() {
         Venda venda = new Venda();
 
-        Usuario usuario = _usuarioRepository.getOne(1L);
+        List<Usuario> usuarios = _usuarioRepository.findAll();
+        Usuario usuario = usuarios.get(0);
         Produto produto = new Produto();
 
 

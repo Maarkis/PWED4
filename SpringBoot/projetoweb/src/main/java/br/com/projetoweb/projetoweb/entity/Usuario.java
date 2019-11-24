@@ -29,13 +29,6 @@ public class Usuario {
     @Column(nullable = false, name = "ativo")
     private Boolean ativo = true;
 
-//    public Usuario(String nome, String login, String senha, PerfilUsuario perfilUsuario) {
-//        this.nome = nome;
-//        this.login = login;
-//        this.senha = senha;
-//        this.perfilUsuario = perfilUsuario;
-//    }
-
 
     public long getIdUsuario() {
         return idUsuario;

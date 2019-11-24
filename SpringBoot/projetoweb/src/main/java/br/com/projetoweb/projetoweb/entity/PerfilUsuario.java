@@ -2,8 +2,6 @@ package br.com.projetoweb.projetoweb.entity;
 
 import javax.persistence.*;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Entity
 public class PerfilUsuario {
@@ -18,14 +16,6 @@ public class PerfilUsuario {
 
     @OneToMany(mappedBy = "perfilUsuario", cascade = CascadeType.ALL)
     private Set<Usuario> usuarios;
-
-//    public PerfilUsuario(String nome, Usuario... usuarios) {
-//        this.nome = nome;
-//        this.usuarios = Stream.of(usuarios).collect(Collectors.toSet());
-//        this.usuarios.forEach(usuario -> {
-//            usuario.setPerfilUsuario(this);
-//        });
-//    }
 
     public long getIdPerfilUsuario() {
         return idPerfilUsuario;

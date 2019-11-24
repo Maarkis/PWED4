@@ -24,7 +24,7 @@ public class Produto {
     @Column(nullable = false, name = "preco")
     private float preco;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "produtos")
     private Set<Venda> vendas = new HashSet<Venda>();
 
     public long getIdProduto() {
