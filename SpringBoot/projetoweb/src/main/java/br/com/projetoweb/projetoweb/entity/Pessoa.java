@@ -26,14 +26,18 @@ public class Pessoa {
     private String cpf;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "idUsuario")
+    // @JoinColumn(name = "pessoa_usuario_id", referencedColumnName = "idUsuario")
+    @JoinTable(name = "tbl_pessoa_usuario",
+            joinColumns =
+                    { @JoinColumn(name = "idPessoa", referencedColumnName = "idPessoa") },
+            inverseJoinColumns =
+                    { @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario") })
     private Usuario usuario;
 
 
 
     // Getters e Setters
     public long getIdPessoa() { return idPessoa; }
-
     public void setIdPessoa(long idPessoa) { this.idPessoa = idPessoa; }
 
     public String getNome() { return nome; }
@@ -48,7 +52,6 @@ public class Pessoa {
     public Usuario getUsuario() {
         return usuario;
     }
-
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }

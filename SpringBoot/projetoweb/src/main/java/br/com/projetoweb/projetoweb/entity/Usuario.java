@@ -5,11 +5,11 @@ import javax.persistence.*;
 import javax.persistence.Id;
 
 @Entity
-@Table(name = "tbl_Usuario")
+@Table(name = "tbl_Usuarios")
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUsuario")
     private long usuarioId;
 
@@ -22,13 +22,10 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean ativo;
 
-    @OneToOne(mappedBy = "usuario")
-    private Pessoa pessoa;
 
     public long getUsuarioId() {
         return usuarioId;
     }
-
     public void setUsuarioId(long usuarioId) {
         this.usuarioId = usuarioId;
     }
@@ -36,7 +33,6 @@ public class Usuario {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -44,7 +40,6 @@ public class Usuario {
     public String getSenha() {
         return senha;
     }
-
     public void setSenha(String senha) {
         this.senha = senha;
     }
@@ -52,18 +47,8 @@ public class Usuario {
     public Boolean getAtivo() {
         return ativo;
     }
-
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
-
 
 }
