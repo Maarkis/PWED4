@@ -5,40 +5,60 @@ import javax.persistence.*;
 import javax.persistence.Id;
 
 @Entity
-@Table(name = "tbl_Usuario")
+@Table(name = "usuario")
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idUsuario")
-    private long usuarioId;
+    private long idUsuario;
 
-    @Column(nullable = false)
-    private String email;
+    @Column(nullable = false, name = "nome")
+    private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "login")
+    private String login;
+
+    @Column(nullable = false, name = "senha")
     private String senha;
 
-    @Column(nullable = false)
-    private Boolean ativo;
+    @ManyToOne
+    @JoinColumn
+    private PerfilUsuario perfilUsuario;
 
-    @OneToOne(mappedBy = "usuario")
-    private Pessoa pessoa;
+    @Column(nullable = false, name = "ativo")
+    private Boolean ativo = true;
 
-    public long getUsuarioId() {
-        return usuarioId;
+//    public Usuario(String nome, String login, String senha, PerfilUsuario perfilUsuario) {
+//        this.nome = nome;
+//        this.login = login;
+//        this.senha = senha;
+//        this.perfilUsuario = perfilUsuario;
+//    }
+
+
+    public long getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuarioId(long usuarioId) {
-        this.usuarioId = usuarioId;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public String getEmail() {
-        return email;
+    public String getNome() {
+        return nome;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getSenha() {
@@ -49,21 +69,19 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Boolean getAtivo() {
-        return ativo;
+    public PerfilUsuario getPerfilUsuario() {
+        return perfilUsuario;
+    }
+
+    public void setPerfilUsuario(PerfilUsuario perfilUsuario) {
+        this.perfilUsuario = perfilUsuario;
     }
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public Boolean getAtivo() {
+        return ativo;
     }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
-
-
 }
