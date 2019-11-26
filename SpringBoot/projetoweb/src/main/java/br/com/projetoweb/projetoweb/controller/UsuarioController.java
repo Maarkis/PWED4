@@ -9,17 +9,22 @@ import br.com.projetoweb.projetoweb.repository.ProdutoRepository;
 import br.com.projetoweb.projetoweb.repository.UsuarioRepository;
 import br.com.projetoweb.projetoweb.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
-
+@CrossOrigin
 @RestController
 public class UsuarioController {
     @Autowired
@@ -36,6 +41,33 @@ public class UsuarioController {
     @RequestMapping(value = "/usuario", method = RequestMethod.GET)
     public List<Usuario> Get() {
         return _usuarioRepository.findAll();
+    }
+
+    @PostMapping("/usuario/cadastro")
+    public ResponseEntity<Usuario> create(@RequestBody @Valid Usuario usuario) {
+        List<PerfilUsuario> perfis = _perfilUsuarioRepository.findByNome(usuario.getPerfilUsuario().getNome());
+        if (!perfis.isEmpty()) {
+            usuario.setPerfilUsuario(perfis.get(0));
+        }
+        Usuario createdUser = _usuarioRepository.save(usuario);
+        if (_usuarioRepository.findById(createdUser.getIdUsuario()).isPresent()) {
+            return ResponseEntity.ok(createdUser);
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/usuario/login")
+    public ResponseEntity<Object> login(String login, String senha, HttpSession session) {
+        List<Usuario> users = _usuarioRepository.findByLoginAndSenha(login, senha);
+        if (!users.isEmpty()) {
+            Usuario foundUser = users.get(0);
+            session.setAttribute("loggedUser", foundUser);
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("username", foundUser.getNome());
+            map.put("profile", foundUser.getPerfilUsuario().getNome());
+            return ResponseEntity.ok(map);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @RequestMapping(value = "/usuario/new", method = RequestMethod.GET)
