@@ -3,11 +3,8 @@ package br.com.projetoweb.projetoweb.entity;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 @Entity
-@Table(name = "produto")
+@Table(name = "tbl_Produto")
 public class Produto {
 
     @Id

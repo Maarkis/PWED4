@@ -1,10 +1,10 @@
 package br.com.projetoweb.projetoweb.controller;
 
-import br.com.projetoweb.projetoweb.entity.PerfilUsuario;
+import br.com.projetoweb.projetoweb.entity.UserProfile;
 import br.com.projetoweb.projetoweb.entity.Produto;
 import br.com.projetoweb.projetoweb.entity.Usuario;
 import br.com.projetoweb.projetoweb.entity.Venda;
-import br.com.projetoweb.projetoweb.repository.PerfilUsuarioRepository;
+import br.com.projetoweb.projetoweb.repository.UserProfileRepository;
 import br.com.projetoweb.projetoweb.repository.ProdutoRepository;
 import br.com.projetoweb.projetoweb.repository.UsuarioRepository;
 import br.com.projetoweb.projetoweb.repository.VendaRepository;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -25,7 +24,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository _usuarioRepository;
     @Autowired
-    private PerfilUsuarioRepository _perfilUsuarioRepository;
+    private UserProfileRepository _userProfileRepository;
     @Autowired
     private VendaRepository _vendaRepository;
     @Autowired
@@ -40,13 +39,13 @@ public class UsuarioController {
 
     @RequestMapping(value = "/usuario/new", method = RequestMethod.GET)
     public void insert() {
-        PerfilUsuario pu = new PerfilUsuario();
-        pu.setNome("Administrador");
-        _perfilUsuarioRepository.save(pu);
+        UserProfile pu = new UserProfile();
+        pu.setRole("Administrador");
+        _userProfileRepository.save(pu);
 
         Usuario usuario = new Usuario();
         usuario.setNome("Pedro");
-        usuario.setPerfilUsuario(pu);
+        usuario.setUserProfile(pu);
         usuario.setLogin("pedro");
         usuario.setSenha("senhaTeste");
         _usuarioRepository.save(usuario);

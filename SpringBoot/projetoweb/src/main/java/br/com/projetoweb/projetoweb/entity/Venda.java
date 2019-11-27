@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Entity
+@Table(name = "tbl_Venda")
 public class Venda {
 
     @Id
@@ -21,7 +22,7 @@ public class Venda {
 
     @ManyToMany
     @JoinTable(
-            name = "venda_produto",
+            name = "tbl_venda_produto",
             joinColumns = {@JoinColumn(name = "idVenda")},
             inverseJoinColumns = {@JoinColumn(name = "idProduto")}
     )

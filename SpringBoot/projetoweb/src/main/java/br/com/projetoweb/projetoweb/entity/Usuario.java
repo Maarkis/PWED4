@@ -5,7 +5,7 @@ import javax.persistence.*;
 import javax.persistence.Id;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "tbl_Usuario")
 public class Usuario {
 
     @Id
@@ -24,7 +24,7 @@ public class Usuario {
 
     @ManyToOne
     @JoinColumn
-    private PerfilUsuario perfilUsuario;
+    private UserProfile userProfile;
 
     @Column(nullable = false, name = "ativo")
     private Boolean ativo = true;
@@ -33,15 +33,13 @@ public class Usuario {
     public long getIdUsuario() {
         return idUsuario;
     }
-
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(long idUsuario) {
         this.idUsuario = idUsuario;
     }
 
     public String getNome() {
         return nome;
     }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -49,7 +47,6 @@ public class Usuario {
     public String getLogin() {
         return login;
     }
-
     public void setLogin(String login) {
         this.login = login;
     }
@@ -57,24 +54,23 @@ public class Usuario {
     public String getSenha() {
         return senha;
     }
-
     public void setSenha(String senha) {
         this.senha = senha;
     }
 
-    public PerfilUsuario getPerfilUsuario() {
-        return perfilUsuario;
+    public UserProfile getUserProfile() {
+        return userProfile;
     }
-
-    public void setPerfilUsuario(PerfilUsuario perfilUsuario) {
-        this.perfilUsuario = perfilUsuario;
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
-
     public Boolean getAtivo() {
         return ativo;
     }
+
+
 }
