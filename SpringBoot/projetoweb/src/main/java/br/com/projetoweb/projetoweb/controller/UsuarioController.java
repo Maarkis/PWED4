@@ -1,5 +1,6 @@
 package br.com.projetoweb.projetoweb.controller;
 
+import br.com.projetoweb.projetoweb.AuthHandler;
 import br.com.projetoweb.projetoweb.entity.PerfilUsuario;
 import br.com.projetoweb.projetoweb.entity.Produto;
 import br.com.projetoweb.projetoweb.entity.Usuario;
@@ -23,9 +24,11 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @CrossOrigin
 @RestController
+@RequestMapping(value = "/usuario")
 public class UsuarioController {
     @Autowired
     private UsuarioRepository _usuarioRepository;
@@ -38,13 +41,14 @@ public class UsuarioController {
 
 
     // Method GET
-    @RequestMapping(value = "/usuario", method = RequestMethod.GET)
+    @GetMapping
     public List<Usuario> Get() {
         return _usuarioRepository.findAll();
     }
 
-    @PostMapping("/usuario/cadastro")
+    @PostMapping("/cadastro")
     public ResponseEntity<Usuario> create(@RequestBody @Valid Usuario usuario) {
+        //TODO: verificar se login e/ou seja já existem
         List<PerfilUsuario> perfis = _perfilUsuarioRepository.findByNome(usuario.getPerfilUsuario().getNome());
         if (!perfis.isEmpty()) {
             usuario.setPerfilUsuario(perfis.get(0));
@@ -56,15 +60,19 @@ public class UsuarioController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/usuario/login")
-    public ResponseEntity<Object> login(String login, String senha, HttpSession session) {
-        List<Usuario> users = _usuarioRepository.findByLoginAndSenha(login, senha);
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody Map<String, Object> credentials, HttpSession session) {
+        String login = (String) credentials.get("login");
+        String password = (String) credentials.get("password");
+        List<Usuario> users = _usuarioRepository.findByLoginAndSenha(login, password);
         if (!users.isEmpty()) {
             Usuario foundUser = users.get(0);
-            session.setAttribute("loggedUser", foundUser);
+            UUID sessionId = UUID.randomUUID();
+            session.setAttribute(sessionId.toString(), foundUser);
             Map<String, String> map = new HashMap<String, String>();
             map.put("username", foundUser.getNome());
             map.put("profile", foundUser.getPerfilUsuario().getNome());
+            map.put("token", sessionId.toString());
             return ResponseEntity.ok(map);
         }
         return ResponseEntity.notFound().build();
