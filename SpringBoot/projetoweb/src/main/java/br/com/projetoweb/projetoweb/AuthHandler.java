@@ -10,17 +10,27 @@ import java.io.IOException;
 
 public class AuthHandler extends HandlerInterceptorAdapter {
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object controller) throws IOException {
-        if (!request.getRequestURI().equals("/usuario/login")) {
-            HttpSession session = request.getSession();
-            String accessToken = request.getHeader("access-token");
-            if (session.getAttribute(accessToken) == null) {
-                response.setStatus(401);
-                return false;
-            }
-            return true;
-        } else
-            return true;
-    }
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object controller) throws IOException {
+//        String clientSessionID = request.getHeader("session-id");
+//        if (!request.getRequestURI().equals("/login") && !request.getMethod().equals("OPTIONS")) {
+//            HttpSession session = request.getSession();
+//            String userAccessToken = request.getHeader("access-token");
+//            Object token = session.getAttribute("access-token");
+//            if (userAccessToken == null || token == null) {
+//                response.setStatus(401);
+//                return false;
+//            } else {
+//                String sessionAccessToken = token.toString();
+//                if (userAccessToken.equals(sessionAccessToken)) {
+//                    return true;
+//                }
+//                response.setStatus(401);
+//                return false;
+//            }
+//        } else
+//            return true;
+//
+//    }
+
 }

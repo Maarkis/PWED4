@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@CrossOrigin
 @RestController
 @RequestMapping(value = "/usuario")
+@CrossOrigin
 public class UsuarioController {
     @Autowired
     private UsuarioRepository _usuarioRepository;
@@ -48,7 +48,7 @@ public class UsuarioController {
 
     @PostMapping("/cadastro")
     public ResponseEntity<Usuario> create(@RequestBody @Valid Usuario usuario) {
-        //TODO: verificar se login e/ou seja já existem
+        //TODO: verificar se login e/ou senha já existem
         List<PerfilUsuario> perfis = _perfilUsuarioRepository.findByNome(usuario.getPerfilUsuario().getNome());
         if (!perfis.isEmpty()) {
             usuario.setPerfilUsuario(perfis.get(0));
@@ -60,79 +60,33 @@ public class UsuarioController {
         return ResponseEntity.badRequest().build();
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody Map<String, Object> credentials, HttpSession session) {
-        String login = (String) credentials.get("login");
-        String password = (String) credentials.get("password");
-        List<Usuario> users = _usuarioRepository.findByLoginAndSenha(login, password);
-        if (!users.isEmpty()) {
-            Usuario foundUser = users.get(0);
-            UUID sessionId = UUID.randomUUID();
-            session.setAttribute(sessionId.toString(), foundUser);
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("username", foundUser.getNome());
-            map.put("profile", foundUser.getPerfilUsuario().getNome());
-            map.put("token", sessionId.toString());
-            return ResponseEntity.ok(map);
+    @PutMapping
+    public ResponseEntity<Usuario> editar(@RequestBody @Valid Usuario usuario) {
+        if (usuario.getIdUsuario() == 0) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        if (!_usuarioRepository.findById(usuario.getIdUsuario()).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        Usuario editedUser = _usuarioRepository.save(usuario);
+        if (editedUser == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(editedUser);
     }
 
-    @RequestMapping(value = "/usuario/new", method = RequestMethod.GET)
-    public void insert() {
-        PerfilUsuario pu = new PerfilUsuario();
-        pu.setNome("Administrador");
-        _perfilUsuarioRepository.save(pu);
-
-        Usuario usuario = new Usuario();
-        usuario.setNome("Pedro");
-        usuario.setPerfilUsuario(pu);
-        usuario.setLogin("pedro");
-        usuario.setSenha("senhaTeste");
-        _usuarioRepository.save(usuario);
+    @PostMapping("/excluir")
+    public ResponseEntity<Usuario> delete(@RequestBody Usuario usuario) {
+        if(usuario.getIdUsuario() == 0){
+            return ResponseEntity.badRequest().build();
+        }
+        _usuarioRepository.delete(usuario);
+        return ResponseEntity.ok(usuario);
     }
 
-
-    @RequestMapping(value = "/usuario/venda", method = RequestMethod.GET)
-    public void newVenda() {
-        Venda venda = new Venda();
-
-        List<Usuario> usuarios = _usuarioRepository.findAll();
-        Usuario usuario = usuarios.get(0);
-        Produto produto = new Produto();
-
-
-        produto.setNome("p1");
-        produto.setDescricao("p1");
-        produto.setPreco((float) 1.10);
-        _produtoRepository.save(produto);
-        venda.addProduto(produto);
-        produto = new Produto();
-
-        produto.setNome("p2");
-        produto.setDescricao("p2");
-        produto.setPreco((float) 2.10);
-        _produtoRepository.save(produto);
-        venda.addProduto(produto);
-        produto = new Produto();
-
-        produto.setNome("p3");
-        produto.setDescricao("p3");
-        produto.setPreco((float) 3.10);
-        _produtoRepository.save(produto);
-        venda.addProduto(produto);
-        produto = new Produto();
-
-        produto.setNome("p4");
-        produto.setDescricao("p4");
-        produto.setPreco((float) 4.10);
-        _produtoRepository.save(produto);
-        venda.addProduto(produto);
-
-        venda.setUsuario(usuario);
-        venda.setDataVenda(Timestamp.from(Instant.now()));
-        _vendaRepository.save(venda);
-
+    @GetMapping("/perfil")
+    public List<PerfilUsuario> listPerfil() {
+        return _perfilUsuarioRepository.findAll();
     }
 
 

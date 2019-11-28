@@ -24,8 +24,8 @@ public class Produto {
     @Column(nullable = false, name = "preco")
     private float preco;
 
-    @ManyToMany(mappedBy = "produtos")
-    private Set<Venda> vendas = new HashSet<Venda>();
+//    @ManyToMany(mappedBy = "produtos")
+//    private Set<Venda> vendas = new HashSet<Venda>();
 
     public long getIdProduto() {
         return idProduto;
@@ -55,7 +55,7 @@ public class Produto {
         this.preco = preco;
     }
 
-    public Set<Venda> getVendas() {
-        return vendas;
-    }
+//    public Set<Venda> getVendas() {
+//        return vendas;
+//    }
 }
